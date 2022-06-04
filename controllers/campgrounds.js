@@ -4,6 +4,8 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding')
 const mapboxToken = process.env.MAPBOX_TOKEN
 const geocoder = mbxGeocoding({ accessToken: mapboxToken })
 
+const dayjs = require('dayjs')
+
 const { cloudinary } = require('../cloudinary')
 
 const catchAsync = require('../util/catchAsync')
@@ -31,6 +33,7 @@ module.exports.createCampground = catchAsync(async (req, res, next) => {
     filename: file.filename,
   }))
   campground.author = req.user._id
+  campground.date = dayjs()
   await campground.save()
   req.flash('success', 'Campground uploaded successfully')
   res.redirect(`/campgrounds/${campground._id}`)
